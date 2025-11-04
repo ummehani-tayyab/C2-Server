@@ -20,14 +20,14 @@ pipelines:
           services:
             - docker
           script:
-            - docker build -t idoubles-cnc:latest .            
+            - docker build -t cnc:latest .            
             - pipe: atlassian/google-gar-push-image:0.3.1
               variables:
                 KEY_FILE: $GCP_KEY
                 LOCATION: "europe-central2"
                 PROJECT: "focused-tract-439516-n8"
-                REPOSITORY: "idoubles-cnc"
-                IMAGE_NAME: "idoubles-cnc"
+                REPOSITORY: "cnc"
+                IMAGE_NAME: "cnc"
                 VERSION: ${VERSION}
                 TAGS: "latest"
       - step:
@@ -39,8 +39,8 @@ pipelines:
                 KEY_FILE: '$SERVICE_ACCOUNT_KEY_FILE_BASE64'
                 PROJECT: 'focused-tract-439516-n8'
                 COMPUTE_ZONE: 'europe-central2'
-                CLUSTER_NAME: 'idoubles-iris'
-                KUBECTL_COMMAND: 'rollout restart deployments/idoubles-cnc -n idoubles-cnc'
+                CLUSTER_NAME: ''
+                KUBECTL_COMMAND: 'rollout restart deployments/cnc -n cnc'
     
 
 definitions:
