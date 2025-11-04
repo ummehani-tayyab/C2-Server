@@ -19,12 +19,12 @@ Each endpoint below is designed to support red team and testing workflows. Examp
 
 **Purpose**: Download a file from the internet to the C2 server’s `payloads/` directory.
 
-**URL**: `https://cnc.idoubles.app/fetch`
+**URL**: `https://****/fetch`
 
 **PowerShell Usage**:
 
 ```powershell
-Invoke-RestMethod -Uri "https://cnc.idoubles.app/fetch" `
+Invoke-RestMethod -Uri "https://****/fetch" `
   -Method Post `
   -ContentType "application/json" `
   -Body '{"url":"https://example.com/tool.exe"}'
@@ -48,12 +48,12 @@ Invoke-RestMethod -Uri "https://cnc.idoubles.app/fetch" `
 
 **URL Format**:
 ```
-https://cnc.idoubles.app/payload/<filename>
+https://****/payload/<filename>
 ```
 
 **Example PowerShell Download**:
 ```powershell
-Invoke-WebRequest -Uri "https://cnc.idoubles.app/payload/tool.exe" -OutFile "tool.exe"
+Invoke-WebRequest -Uri "https://****/payload/tool.exe" -OutFile "tool.exe"
 ```
 
 This supports all file types, including:
@@ -68,15 +68,15 @@ This supports all file types, including:
 
 **URL**:
 ```
-https://cnc.idoubles.app/files
+https://****/files
 ```
 
  This is useful for browsing or testing from a web browser. You’ll see:
 
 ```html
 Available Payloads:
-• [tool.exe](https://cnc.idoubles.app/payload/tool.exe)
-• [capec.csv](https://cnc.idoubles.app/payload/capec.csv)
+• [tool.exe](https://****/payload/tool.exe)
+• [capec.csv](https://****/payload/capec.csv)
 ...
 ```
 ###  `GET /upload`
@@ -85,7 +85,7 @@ Available Payloads:
 
 **URL**:
 ```
-https://cnc.idoubles.app/upload
+https://****/upload
 ```
 
 - Allows **multiple file selection and upload** from your local machine.
@@ -105,7 +105,7 @@ $urls = @(
   "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack-relationship-objects.csv"
 )
 
-$c2_url = "https://cnc.idoubles.app/fetch"
+$c2_url = "https://****/fetch"
 
 foreach ($url in $urls) {
     $body = @{ url = $url } | ConvertTo-Json
@@ -116,7 +116,7 @@ foreach ($url in $urls) {
 
 After execution, all files will be available at:
 ```
-https://cnc.idoubles.app/files
+https://****/files
 ```
 
 ---
