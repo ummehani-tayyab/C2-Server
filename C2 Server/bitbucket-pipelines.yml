@@ -1,0 +1,49 @@
+#  Template python-build
+
+#  This template allows you to validate your python code.
+#  The workflow allows running tests and code linting on the default branch.
+
+image: python:3.10
+
+options:
+  docker: true
+  size: 2x
+  
+pipelines:  
+  branches:
+    main:
+      - step:
+          name: Push Docker Image to GAR
+          image: amazon/aws-cli
+          size: 2x
+          oidc: true
+          services:
+            - docker
+          script:
+            - docker build -t idoubles-cnc:latest .            
+            - pipe: atlassian/google-gar-push-image:0.3.1
+              variables:
+                KEY_FILE: $GCP_KEY
+                LOCATION: "europe-central2"
+                PROJECT: "focused-tract-439516-n8"
+                REPOSITORY: "idoubles-cnc"
+                IMAGE_NAME: "idoubles-cnc"
+                VERSION: ${VERSION}
+                TAGS: "latest"
+      - step:
+          name: Deploy to GKE Production Server
+          script:
+            - echo "$SERVICE_ACCOUNT_KEY_FILE" > service_account.json
+            - pipe: atlassian/google-gke-kubectl-run:3.5.0
+              variables:
+                KEY_FILE: '$SERVICE_ACCOUNT_KEY_FILE_BASE64'
+                PROJECT: 'focused-tract-439516-n8'
+                COMPUTE_ZONE: 'europe-central2'
+                CLUSTER_NAME: 'idoubles-iris'
+                KUBECTL_COMMAND: 'rollout restart deployments/idoubles-cnc -n idoubles-cnc'
+    
+
+definitions:
+  services:
+    docker:
+      memory: 4096
